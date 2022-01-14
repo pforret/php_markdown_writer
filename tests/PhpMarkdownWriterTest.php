@@ -1,14 +1,15 @@
 <?php
 
-namespace Pforret\Tests;
+namespace Pforret\PhpMarkdownWriter\Tests;
 
+use Pforret\PhpMarkdownWriter\PhpMarkdownWriter;
 use PHPUnit\Framework\TestCase;
 
-class ExampleTest extends TestCase
+class PhpMarkdownWriterTest extends TestCase
 {
-    /** @test */
-    public function true_is_true()
+    public function testMarkup()
     {
-        $this->assertTrue(true);
+        $writer = new PhpMarkdownWriter();
+        $this->assertEquals("this is a [www.google.com](https://www.google.com) link", $writer->markup("this is a https://www.google.com link"));
     }
 }
