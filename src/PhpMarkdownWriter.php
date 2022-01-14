@@ -1,4 +1,5 @@
 <?php
+
 namespace Pforret\PhpMarkdownWriter;
 
 class PhpMarkdownWriter
@@ -35,62 +36,73 @@ class PhpMarkdownWriter
 
     public function h1($text): PhpMarkdownWriter
     {
-        if (! $this->enabled) {
+        if (!$this->enabled) {
             return $this;
         }
-        fwrite($this->fp, "# $text\n");
+        fwrite($this->fp, "\n# $text\n");
 
         return $this;
     }
 
     public function h2($text): PhpMarkdownWriter
     {
-        if (! $this->enabled) {
+        if (!$this->enabled) {
             return $this;
         }
-        fwrite($this->fp, "## $text\n");
+        fwrite($this->fp, "\n## $text\n");
 
         return $this;
     }
 
     public function h3($text): PhpMarkdownWriter
     {
-        if (! $this->enabled) {
+        if (!$this->enabled) {
             return $this;
         }
-        fwrite($this->fp, "### $text\n");
+        fwrite($this->fp, "\n### $text\n");
 
         return $this;
     }
 
     public function h4($text): PhpMarkdownWriter
     {
-        if (! $this->enabled) {
+        if (!$this->enabled) {
             return $this;
         }
-        fwrite($this->fp, "#### $text\n");
+        fwrite($this->fp, "\n#### $text\n");
 
         return $this;
     }
 
     public function bullet($text, $indent = 0): PhpMarkdownWriter
     {
-        if (! $this->enabled) {
+        if (!$this->enabled) {
             return $this;
         }
         $prefix = str_repeat("   ", $indent);
-        fwrite($this->fp, $prefix . "* " . $this->markup($text) ."\n");
+        fwrite($this->fp, $prefix . "* " . $this->markup($text) . "\n");
+
+        return $this;
+    }
+
+    public function check($text, $done = false): PhpMarkdownWriter
+    {
+        if (!$this->enabled) {
+            return $this;
+        }
+        $prefix = $done ? "[x] " : "[ ] ";
+        fwrite($this->fp, $prefix . $this->markup($text) . "\n");
 
         return $this;
     }
 
     public function paragraph($text, $continued = false): PhpMarkdownWriter
     {
-        if (! $this->enabled) {
+        if (!$this->enabled) {
             return $this;
         }
         $eol = "\n";
-        if (! $continued) {
+        if (!$continued) {
             $eol .= "\n";
         }
         fwrite($this->fp, $this->markup($text) . $eol);
@@ -100,10 +112,10 @@ class PhpMarkdownWriter
 
     public function code($text, $language = ""): PhpMarkdownWriter
     {
-        if (! $this->enabled) {
+        if (!$this->enabled) {
             return $this;
         }
-        fwrite($this->fp, "```$language\n$text\n```\n");
+        fwrite($this->fp, "\n```$language\n$text\n```\n");
 
         return $this;
     }
