@@ -25,8 +25,13 @@ composer require pforret/php_markdown_writer
 ## Usage
 
 ``` php
-$obj = new Pforret\PhpMarkdownWriter();
-echo $obj->echoPhrase('Hello, pforret!');
+$obj = new Pforret\PhpMarkdownWriter("output.md");
+echo $obj->h1('Output Report');
+echo $obj->h2('Input');
+echo $obj->paragraph('Lorem ipsum');
+echo $obj->h2('Output');
+echo $obj->bullet('point 1');
+echo $obj->bullet('point 2');
 ```
 
 ## Testing
