@@ -1,35 +1,56 @@
-# ts_php_template
+# Write Markdown documents
 
-![Run Tests](https://github.com/toolstud-io/ts_php_template/workflows/Run%20Tests/badge.svg)
-![Detect Psalm warnings](https://github.com/toolstud-io/ts_php_template/workflows/Detect%20Psalm%20warnings/badge.svg)
-![Check & fix styling](https://github.com/toolstud-io/ts_php_template/workflows/Check%20&%20fix%20styling/badge.svg)
+Github: 
+![GitHub tag](https://img.shields.io/github/v/tag/pforret/php_markdown_writer)
+![Tests](https://github.com/pforret/php_markdown_writer/workflows/Run%20Tests/badge.svg)
+![Psalm](https://github.com/pforret/php_markdown_writer/workflows/Detect%20Psalm%20warnings/badge.svg)
+![Styling](https://github.com/pforret/php_markdown_writer/workflows/Check%20&%20fix%20styling/badge.svg)
 
-Base package template for development of open source PHP packages
+Packagist: 
+[![Packagist Version](https://img.shields.io/packagist/v/pforret/php_markdown_writer.svg?style=flat-square)](https://packagist.org/packages/pforret/php_markdown_writer)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/pforret/php_markdown_writer.svg?style=flat-square)](https://packagist.org/packages/pforret/php_markdown_writer)
 
-_Created on 2020-07-30 by Peter Forret for toolstud.io_
+Write Markdown documents
+
+	created on 2022-01-14 by peter@forret.com
+
+## Installation
+
+You can install the package via composer:
+
+```bash
+composer require pforret/php_markdown_writer
+```
 
 ## Usage
 
-* on https://github.com/toolstud-io/ts_php_template
-* click on 'Use this template'
-* choose the name of your new package
-* `git clone <your github>/<your_new_package>`
-* `cd <your_new_package>`
-* `./first_run_this.sh`
-* answer all the questions correctly
-* taadaa!
+``` php
+$obj = new Pforret\PhpMarkdownWriter();
+echo $obj->echoPhrase('Hello, pforret!');
+```
 
-## Inspiration
+## Testing
 
-* from https://github.com/spatie/package-skeleton-php
+``` bash
+composer test
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
+## Security
+
+If you discover any security related issues, please email author_email instead of using the issue tracker.
+
 ## Credits
 
 - [Peter Forret](https://github.com/pforret)
+- [All Contributors](../../contributors)
 
 ## License
 

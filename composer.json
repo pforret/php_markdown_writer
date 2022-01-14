@@ -1,17 +1,17 @@
 {
-    "name": "author_username/package_name",
+    "name": "pforret/php_markdown_writer",
     "version": "1.1.1",
-    "description": "package_description",
+    "description": "Write Markdown documents",
     "keywords": [
-        "author_username",
-        "package_name"
+        "pforret",
+        "php_markdown_writer"
     ],
-    "homepage": "https://github.com/author_username/package_name",
+    "homepage": "https://github.com/pforret/php_markdown_writer",
     "license": "MIT",
     "authors": [
         {
-            "name": "author_name",
-            "email": "author@email.com",
+            "name": "Peter Forret",
+            "email": "peter@forret.com",
             "role": "Developer"
         }
     ],
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "package_namespace\\class_name\\": "src"
+            "Pforret\\PhpMarkdownWriter\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "package_namespace\\class_name\\Tests\\": "tests"
+            "Pforret\\PhpMarkdownWriter\\Tests\\": "tests"
         }
     },
     "scripts": {
