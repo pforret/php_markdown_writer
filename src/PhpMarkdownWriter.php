@@ -36,7 +36,7 @@ class PhpMarkdownWriter
 
     public function h1($text): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $this;
         }
         fwrite($this->fp, "\n# $text\n");
@@ -46,7 +46,7 @@ class PhpMarkdownWriter
 
     public function h2($text): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $this;
         }
         fwrite($this->fp, "\n## $text\n");
@@ -56,7 +56,7 @@ class PhpMarkdownWriter
 
     public function h3($text): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $this;
         }
         fwrite($this->fp, "\n### $text\n");
@@ -66,7 +66,7 @@ class PhpMarkdownWriter
 
     public function h4($text): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $this;
         }
         fwrite($this->fp, "\n#### $text\n");
@@ -76,7 +76,7 @@ class PhpMarkdownWriter
 
     public function bullet($text, $indent = 0): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $this;
         }
         $prefix = str_repeat("   ", $indent);
@@ -87,7 +87,7 @@ class PhpMarkdownWriter
 
     public function check($text, $done = false): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $this;
         }
         $prefix = $done ? "[x] " : "[ ] ";
@@ -98,11 +98,11 @@ class PhpMarkdownWriter
 
     public function paragraph($text, $continued = false): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $this;
         }
         $eol = "\n";
-        if (!$continued) {
+        if (! $continued) {
             $eol .= "\n";
         }
         fwrite($this->fp, $this->markup($text) . $eol);
@@ -112,7 +112,7 @@ class PhpMarkdownWriter
 
     public function code($text, $language = ""): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return $this;
         }
         fwrite($this->fp, "\n```$language\n$text\n```\n");
