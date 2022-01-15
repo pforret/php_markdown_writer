@@ -23,6 +23,7 @@ class PhpMarkdownWriter
     {
         $this->markdown = "";
         $this->fp = false;
+
         return $this;
     }
 
@@ -36,30 +37,35 @@ class PhpMarkdownWriter
     public function h1($text): PhpMarkdownWriter
     {
         $this->add("\n# $text\n");
+
         return $this;
     }
 
     public function h2($text): PhpMarkdownWriter
     {
         $this->add("\n## $text\n");
+
         return $this;
     }
 
     public function h3($text): PhpMarkdownWriter
     {
         $this->add("\n### $text\n");
+
         return $this;
     }
 
     public function h4($text): PhpMarkdownWriter
     {
         $this->add("\n#### $text\n");
+
         return $this;
     }
 
     public function bullet($text, $indent = 0): PhpMarkdownWriter
     {
         $this->add(str_repeat("   ", $indent) . "* " . $this->markup($text) . "\n");
+
         return $this;
     }
 
@@ -67,6 +73,7 @@ class PhpMarkdownWriter
     {
         $prefix = $done ? "[x] " : "[ ] ";
         $this->add($prefix . $this->markup($text) . "\n");
+
         return $this;
     }
 
@@ -74,18 +81,21 @@ class PhpMarkdownWriter
     {
         $eol = $continued ? "\n" : "\n\n";
         $this->add($this->markup($text) . $eol);
+
         return $this;
     }
 
     public function code($text, $language = ""): PhpMarkdownWriter
     {
         $this->add("\n```$language\n$text\n```\n");
+
         return $this;
     }
 
     public function fixed($text): PhpMarkdownWriter
     {
         $this->add("    $text\n");
+
         return $this;
     }
 
@@ -122,6 +132,7 @@ class PhpMarkdownWriter
                 }
             }
         }
+
         return $this;
     }
 
@@ -145,6 +156,7 @@ class PhpMarkdownWriter
     {
         $markup = preg_replace("|http://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $text);
         $markup = preg_replace("|https://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $markup);
+
         return preg_replace("|ftp://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $markup);
     }
 
