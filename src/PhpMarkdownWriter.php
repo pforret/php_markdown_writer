@@ -95,19 +95,19 @@ class PhpMarkdownWriter
         if (is_array($first_element)) {
             // 2 or more dimensional table
             if ($with_headers) {
-                $line = "| ";
+                $line = "|";
                 foreach ($first_element as $key => $val) {
-                    $line .= "$key | ";
+                    $line .= " $key |";
                 }
-                $line .= "|\n";
+                $line .= "\n";
                 $this->add($line);
             }
             foreach ($table as $id => $row) {
-                $line = "| ";
+                $line = "|";
                 foreach ($row as $key => $val) {
-                    $line .= "$val | ";
+                    $line .= " $val |";
                 }
-                $line .= "|\n";
+                $line .= "\n";
                 $this->add($line);
             }
         } else {
