@@ -17,7 +17,7 @@ class PhpMarkdownWriterTest extends TestCase
     {
         $writer = new PhpMarkdownWriter();
         $writer->h1("test");
-        $this->assertEquals("\n# test\n",$writer->asMarkdown(),"h1 -> #");
+        $this->assertEquals("\n# test\n", $writer->asMarkdown(), "h1 -> #");
     }
 
     public function testH2()
