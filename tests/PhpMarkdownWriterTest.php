@@ -24,32 +24,34 @@ class PhpMarkdownWriterTest extends TestCase
     {
         $writer = new PhpMarkdownWriter();
         $writer->h2("test");
-        $this->assertEquals("\n## test\n",$writer->asMarkdown(),"h2 -> ##");
+        $this->assertEquals("\n## test\n", $writer->asMarkdown(), "h2 -> ##");
     }
 
     public function testH3()
     {
         $writer = new PhpMarkdownWriter();
         $writer->h3("test");
-        $this->assertEquals("\n### test\n",$writer->asMarkdown(),"h3 -> ###");
+        $this->assertEquals("\n### test\n", $writer->asMarkdown(), "h3 -> ###");
     }
 
     public function testH4()
     {
         $writer = new PhpMarkdownWriter();
         $writer->h4("test");
-        $this->assertEquals("\n#### test\n",$writer->asMarkdown(),"h4 -> ####");
+        $this->assertEquals("\n#### test\n", $writer->asMarkdown(), "h4 -> ####");
     }
 
-    public function testTable(){
+    public function testTable()
+    {
         $writer = new PhpMarkdownWriter();
-        $writer->table(["alfa","beta"],false);
-        $this->assertEquals("| alfa |\n| beta |\n",$writer->asMarkdown(),"table -> | | |");
+        $writer->table(["alfa","beta"], false);
+        $this->assertEquals("| alfa |\n| beta |\n", $writer->asMarkdown(), "table -> | | |");
         $writer->reset();
-        $writer->table([ ["name" => "Peter", "email" => "peter@forret.com" ],["name" => "John", "email" => "john@forret.com" ] ],true);
+        $writer->table([ ["name" => "Peter", "email" => "peter@forret.com" ],["name" => "John", "email" => "john@forret.com" ] ], true);
         $this->assertEquals(
             "| name | email |\n| Peter | peter@forret.com |\n| John | john@forret.com |\n",
             $writer->asMarkdown(),
-            "table -> | | |");
+            "table -> | | |"
+        );
     }
 }
