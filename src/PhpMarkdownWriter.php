@@ -4,12 +4,11 @@ namespace Pforret\PhpMarkdownWriter;
 
 class PhpMarkdownWriter
 {
-    private bool $enabled = false;
     /**
      * @var false|resource
      */
     private $fp;
-
+    private string $markdown = "";
 
     public function __construct(string $filename = "")
     {
@@ -20,104 +19,118 @@ class PhpMarkdownWriter
         return $this;
     }
 
+    public function reset(): PhpMarkdownWriter
+    {
+        $this->markdown = "";
+        $this->fp = false;
+        return $this;
+    }
+
     public function setOutput($filename)
     {
-        try {
-            $this->fp = fopen($filename, "w");
-        } catch (WriterException $e) {
-            print($e->getMessage());
-        }
-        if ($this->fp) {
-            $this->enabled = true;
-        }
+        $this->fp = fopen($filename, "w");
     }
 
     // formatted output
 
     public function h1($text): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
-            return $this;
-        }
-        fwrite($this->fp, "\n# $text\n");
-
+        $this->add("\n# $text\n");
         return $this;
     }
 
     public function h2($text): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
-            return $this;
-        }
-        fwrite($this->fp, "\n## $text\n");
-
+        $this->add("\n## $text\n");
         return $this;
     }
 
     public function h3($text): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
-            return $this;
-        }
-        fwrite($this->fp, "\n### $text\n");
-
+        $this->add("\n### $text\n");
         return $this;
     }
 
     public function h4($text): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
-            return $this;
-        }
-        fwrite($this->fp, "\n#### $text\n");
-
+        $this->add("\n#### $text\n");
         return $this;
     }
 
     public function bullet($text, $indent = 0): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
-            return $this;
-        }
-        $prefix = str_repeat("   ", $indent);
-        fwrite($this->fp, $prefix . "* " . $this->markup($text) . "\n");
+        $this->add(str_repeat("   ", $indent) . "* " . $this->markup($text) . "\n");
 
         return $this;
     }
 
     public function check($text, $done = false): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
-            return $this;
-        }
         $prefix = $done ? "[x] " : "[ ] ";
-        fwrite($this->fp, $prefix . $this->markup($text) . "\n");
+        $this->add($prefix . $this->markup($text) . "\n");
 
         return $this;
     }
 
     public function paragraph($text, $continued = false): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
-            return $this;
-        }
-        $eol = "\n";
-        if (!$continued) {
-            $eol .= "\n";
-        }
-        fwrite($this->fp, $this->markup($text) . $eol);
+        $eol = $continued ? "\n" : "\n\n";
+        $this->add($this->markup($text) . $eol);
 
         return $this;
     }
 
     public function code($text, $language = ""): PhpMarkdownWriter
     {
-        if (!$this->enabled) {
-            return $this;
-        }
-        fwrite($this->fp, "\n```$language\n$text\n```\n");
-
+        $this->add("\n```$language\n$text\n```\n");
         return $this;
+    }
+
+    public function fixed($text): PhpMarkdownWriter
+    {
+        $this->add("    $text\n");
+        return $this;
+    }
+
+    public function table($table, $with_headers = true): PhpMarkdownWriter
+    {
+        $first_element = current($table);
+        if (is_array($first_element)) {
+            // 2 or more dimensional table
+            if ($with_headers) {
+                $line = "| ";
+                foreach ($first_element as $key => $val) {
+                    $line .= "$key | ";
+                }
+                $line .= "|\n";
+                $this->add($line);
+            }
+            foreach ($table as $id => $row) {
+                $line = "| ";
+                foreach ($row as $key => $val) {
+                    $line .= "$val | ";
+                }
+                $line .= "|\n";
+                $this->add($line);
+            }
+        } else {
+            // 1-dimensional table
+            if ($with_headers) {
+                foreach ($table as $key => $val) {
+                    $this->add("| $key | $val |\n");
+                }
+            } else {
+                foreach ($table as $key => $val) {
+                    $this->add("| $val |\n");
+                }
+            }
+        }
+        return $this;
+    }
+
+    public function asMarkdown(): string
+    {
+        return $this->markdown;
     }
 
     public function __destruct()
@@ -128,12 +141,21 @@ class PhpMarkdownWriter
         }
     }
 
+    // ----------------------------------
     // internal stuff
+
     public function markup($text)
     {
         $markup = preg_replace("|http://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $text);
         $markup = preg_replace("|https://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $markup);
-
         return preg_replace("|ftp://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $markup);
+    }
+
+    private function add($line)
+    {
+        $this->markdown .= $line;
+        if ($this->fp) {
+            fwrite($this->fp, $line);
+        }
     }
 }
