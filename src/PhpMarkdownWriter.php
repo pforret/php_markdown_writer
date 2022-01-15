@@ -60,7 +60,6 @@ class PhpMarkdownWriter
     public function bullet($text, $indent = 0): PhpMarkdownWriter
     {
         $this->add(str_repeat("   ", $indent) . "* " . $this->markup($text) . "\n");
-
         return $this;
     }
 
@@ -68,7 +67,6 @@ class PhpMarkdownWriter
     {
         $prefix = $done ? "[x] " : "[ ] ";
         $this->add($prefix . $this->markup($text) . "\n");
-
         return $this;
     }
 
@@ -76,7 +74,6 @@ class PhpMarkdownWriter
     {
         $eol = $continued ? "\n" : "\n\n";
         $this->add($this->markup($text) . $eol);
-
         return $this;
     }
 
