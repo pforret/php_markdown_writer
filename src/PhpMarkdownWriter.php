@@ -112,9 +112,9 @@ class PhpMarkdownWriter
                 $line .= "\n";
                 $this->add($line);
             }
-            foreach ($table as $id => $row) {
+            foreach ($table as $row) {
                 $line = "|";
-                foreach ($row as $key => $val) {
+                foreach ($row as $val) {
                     $line .= " $val |";
                 }
                 $line .= "\n";
@@ -127,7 +127,7 @@ class PhpMarkdownWriter
                     $this->add("| $key | $val |\n");
                 }
             } else {
-                foreach ($table as $key => $val) {
+                foreach ($table as $val) {
                     $this->add("| $val |\n");
                 }
             }
