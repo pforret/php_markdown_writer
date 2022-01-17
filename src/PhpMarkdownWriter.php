@@ -99,37 +99,60 @@ class PhpMarkdownWriter
         return $this;
     }
 
+    public function table_header($array){
+        $line="";
+        foreach($array as $cell){
+            $line.="| $cell ";
+        }
+        $line.="|\n";
+        $this->add($line);
+
+        $line="";
+            // line underneath  |---|---|
+        foreach($array as $cell){
+            $cell=str_repeat("-",strlen($cell)+2);
+            $line.="|$cell";
+        }
+        $line.="|\n";
+        $this->add($line);
+
+    }
+
+    public function table_row($array){
+        $line="";
+        foreach($array as $cell){
+            $line.="| $cell ";
+        }
+        $line.="|\n";
+        $this->add($line);
+    }
+    
     public function table($table, $with_headers = true): PhpMarkdownWriter
     {
         $first_element = current($table);
         if (is_array($first_element)) {
             // 2 or more dimensional table
-            if ($with_headers) {
-                $line = "|";
-                foreach ($first_element as $key => $val) {
-                    $line .= " $key |";
-                }
-                $line .= "\n";
-                $this->add($line);
-            }
+            $row_number=0;
             foreach ($table as $row) {
-                $line = "|";
-                foreach ($row as $val) {
-                    $line .= " $val |";
+                $row_number++;
+                if($row_number==1){
+                    if($with_headers){
+                        $this->table_header(array_keys($row));
+                        $this->table_row(array_values($row));
+                    } else {
+                        $this->table_header(array_values($row));
+                    }
+                } else {
+                    $this->table_row(array_values($row));
                 }
-                $line .= "\n";
-                $this->add($line);
             }
         } else {
-            // 1-dimensional table
-            if ($with_headers) {
-                foreach ($table as $key => $val) {
-                    $this->add("| $key | $val |\n");
-                }
+            // 1-dimensional table -- just a row
+            if($with_headers){
+                $this->table_header(array_keys($table));
+                $this->table_row(array_values($table));
             } else {
-                foreach ($table as $val) {
-                    $this->add("| $val |\n");
-                }
+                $this->table_header(array_values($table));
             }
         }
 

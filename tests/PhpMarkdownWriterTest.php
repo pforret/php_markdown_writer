@@ -48,11 +48,12 @@ class PhpMarkdownWriterTest extends TestCase
     {
         $writer = new PhpMarkdownWriter();
         $writer->table(["alfa","beta"], false);
-        $this->assertEquals("| alfa |\n| beta |\n", $writer->asMarkdown(), "table -> | | |");
+        $this->assertEquals("| alfa | beta |\n|------|------|\n", $writer->asMarkdown(), "table -> | | |");
         $writer->reset();
+
         $writer->table([ ["name" => "Peter", "email" => "peter@forret.com" ],["name" => "John", "email" => "john@forret.com" ] ], true);
         $this->assertEquals(
-            "| name | email |\n| Peter | peter@forret.com |\n| John | john@forret.com |\n",
+            "| name | email |\n|------|-------|\n| Peter | peter@forret.com |\n| John | john@forret.com |\n",
             $writer->asMarkdown(),
             "table -> | | |"
         );
