@@ -85,6 +85,22 @@ class PhpMarkdownWriter
         return $this;
     }
 
+    public function italic($text, $continued = false): PhpMarkdownWriter
+    {
+        $eol = $continued ? "\n" : "\n\n";
+        $this->add("*" .trim($this->markup($text)) ."*" . $eol);
+
+        return $this;
+    }
+
+    public function bold($text, $continued = false): PhpMarkdownWriter
+    {
+        $eol = $continued ? "\n" : "\n\n";
+        $this->add("**" .trim($this->markup($text)) ."**" . $eol);
+
+        return $this;
+    }
+
     public function code($text, $language = ""): PhpMarkdownWriter
     {
         $this->add("\n```$language\n$text\n```\n");
@@ -179,6 +195,7 @@ class PhpMarkdownWriter
     {
         $markup = preg_replace("|http://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $text);
         $markup = preg_replace("|https://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $markup);
+        $markup = preg_replace("|([\w_\-.]+@[\w_\-.]+\.[a-z][a-z]+)|", "[\$1](mailto:\$1)", $markup);
 
         return preg_replace("|ftp://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $markup);
     }

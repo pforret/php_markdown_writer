@@ -3,6 +3,7 @@
 namespace Pforret\PhpMarkdownWriter\Tests;
 
 use Pforret\PhpMarkdownWriter\PhpMarkdownWriter;
+
 use PHPUnit\Framework\TestCase;
 
 class PhpMarkdownWriterTest extends TestCase
@@ -13,6 +14,10 @@ class PhpMarkdownWriterTest extends TestCase
         $this->assertEquals(
             "this is a [www.google.com](https://www.google.com) link",
             $writer->markup("this is a https://www.google.com link")
+        );
+        $this->assertEquals(
+            "send email to [peter@forret.com](mailto:peter@forret.com), [test@toolstud.io](mailto:test@toolstud.io), [hans12@mail.first-responder.com](mailto:hans12@mail.first-responder.com)",
+            $writer->markup("send email to peter@forret.com, test@toolstud.io, hans12@mail.first-responder.com")
         );
     }
 
@@ -44,6 +49,13 @@ class PhpMarkdownWriterTest extends TestCase
         $this->assertEquals("\n#### test\n", $writer->asMarkdown(), "h4 -> ####");
     }
 
+    public function testBold()
+    {
+        $writer = new PhpMarkdownWriter();
+        $writer->h4("test");
+
+    }
+    
     public function testTable()
     {
         $writer = new PhpMarkdownWriter();
