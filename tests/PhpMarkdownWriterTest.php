@@ -53,7 +53,6 @@ class PhpMarkdownWriterTest extends TestCase
     {
         $writer = new PhpMarkdownWriter();
         $writer->h4("test");
-
     }
     
     public function testTable()
