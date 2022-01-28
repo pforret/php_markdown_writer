@@ -115,31 +115,32 @@ class PhpMarkdownWriter
         return $this;
     }
 
-    public function table_header($array){
-        $line="";
-        foreach($array as $cell){
-            $line.="| $cell ";
+    public function table_header($array)
+    {
+        $line = "";
+        foreach ($array as $cell) {
+            $line .= "| $cell ";
         }
-        $line.="|\n";
+        $line .= "|\n";
         $this->add($line);
 
-        $line="";
-            // line underneath  |---|---|
-        foreach($array as $cell){
-            $cell=str_repeat("-",strlen($cell)+2);
-            $line.="|$cell";
+        $line = "";
+        // line underneath  |---|---|
+        foreach ($array as $cell) {
+            $cell = str_repeat("-", strlen($cell) + 2);
+            $line .= "|$cell";
         }
-        $line.="|\n";
+        $line .= "|\n";
         $this->add($line);
-
     }
 
-    public function table_row($array){
-        $line="";
-        foreach($array as $cell){
-            $line.="| $cell ";
+    public function table_row($array)
+    {
+        $line = "";
+        foreach ($array as $cell) {
+            $line .= "| $cell ";
         }
-        $line.="|\n";
+        $line .= "|\n";
         $this->add($line);
     }
     
@@ -148,11 +149,11 @@ class PhpMarkdownWriter
         $first_element = current($table);
         if (is_array($first_element)) {
             // 2 or more dimensional table
-            $row_number=0;
+            $row_number = 0;
             foreach ($table as $row) {
                 $row_number++;
-                if($row_number==1){
-                    if($with_headers){
+                if ($row_number == 1) {
+                    if ($with_headers) {
                         $this->table_header(array_keys($row));
                         $this->table_row(array_values($row));
                     } else {
@@ -164,7 +165,7 @@ class PhpMarkdownWriter
             }
         } else {
             // 1-dimensional table -- just a row
-            if($with_headers){
+            if ($with_headers) {
                 $this->table_header(array_keys($table));
                 $this->table_row(array_values($table));
             } else {
