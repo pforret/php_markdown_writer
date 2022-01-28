@@ -71,7 +71,7 @@ class PhpMarkdownWriter
 
     public function check($text, $done = false): PhpMarkdownWriter
     {
-        $prefix = $done ? "[x] " : "[ ] ";
+        $prefix = $done ? "* [x] " : "* [ ] ";
         $this->add($prefix . $this->markup($text) . "\n");
 
         return $this;
@@ -110,7 +110,7 @@ class PhpMarkdownWriter
 
     public function fixed($text): PhpMarkdownWriter
     {
-        $this->add("    $text\n");
+        $this->add("      $text\n");
 
         return $this;
     }
@@ -193,8 +193,8 @@ class PhpMarkdownWriter
 
     public function markup($text)
     {
-        $markup = preg_replace("|http://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $text);
-        $markup = preg_replace("|https://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $markup);
+        $markup = preg_replace("|http://([a-zA-Z0-9/_\-\.\?=&:]*)|", "[\$1](\$0)", $text);
+        $markup = preg_replace("|https://([a-zA-Z0-9/_\-\.\?=&:]*)|", "[\$1](\$0)", $markup);
         $markup = preg_replace("|([\w_\-.]+@[\w_\-.]+\.[a-z][a-z]+)|", "[\$1](mailto:\$1)", $markup);
 
         return preg_replace("|ftp://([a-zA-Z0-9/_\-\.\?=]*)|", "[\$1](\$0)", $markup);
