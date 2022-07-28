@@ -13,6 +13,10 @@ class PhpMarkdownWriter
     public function __construct(string $filename = "")
     {
         if ($filename) {
+            $folder = dirname($filename);
+            if(!is_dir($folder)){
+                mkdir($folder,0777,true);
+            }
             $this->setOutput($filename);
         }
 

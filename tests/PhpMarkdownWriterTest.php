@@ -52,7 +52,8 @@ class PhpMarkdownWriterTest extends TestCase
     public function testBold()
     {
         $writer = new PhpMarkdownWriter();
-        $writer->h4("test");
+        $writer->bold("test");
+        $this->assertEquals("**test**\n\n", $writer->asMarkdown(), "bold -> **");
     }
     
     public function testTable()
