@@ -14,8 +14,8 @@ class PhpMarkdownWriter
     {
         if ($filename) {
             $folder = dirname($filename);
-            if(!is_dir($folder)){
-                mkdir($folder,0777,true);
+            if (! is_dir($folder)) {
+                mkdir($folder, 0777, true);
             }
             $this->setOutput($filename);
         }
