@@ -42,7 +42,7 @@ Single class library in `src/PhpMarkdownWriter.php`:
 
 **Output:** `asMarkdown()`, `asHtml()`, `saveAsMarkdown($file)`, `saveAsHtml($file)`, `saveAsPdf($file)`
 
-**Utility:** `reset()`, `setOutput($filename)`, `markup($text)`, `getConverterConfig()`, `setConverterConfig($config)`, `getPdfConfig()`, `setPdfConfig($config)`, `addPdfHeader($html)`, `addPdfFooter($html)`, `addPdfTitle($title)`, `addPdfAuthor($author)`
+**Utility:** `reset()`, `setOutput($filename)`, `markup($text)`, `getConverterConfig()`, `setConverterConfig($config)`, `getPdfConfig()`, `setPdfConfig($config)`, `setPdfFontFamily($font)`, `setPdfFontSize($size)`, `addPdfHeader($html)`, `addPdfFooter($html)`, `addPdfTitle($title)`, `addPdfAuthor($author)`, `addPdfSubject($subject)`, `addPdfKeywords($keywords)`, `addPdfWatermark($text)`
 
 ## Key Patterns
 
@@ -61,4 +61,4 @@ Single class library in `src/PhpMarkdownWriter.php`:
 
 ## Test Coverage
 
-All public methods are tested in `tests/PhpMarkdownWriterTest.php` (83 tests, 119 assertions).
+All public methods are tested in `tests/PhpMarkdownWriterTest.php` (92 tests, 134 assertions).

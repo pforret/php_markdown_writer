@@ -669,6 +669,51 @@ class PhpMarkdownWriterTest extends TestCase
         $this->assertStringStartsWith('%PDF', $content);
     }
 
+    public function test_set_pdf_font_family()
+    {
+        $writer = new PhpMarkdownWriter;
+        $result = $writer->setPdfFontFamily('DejaVuSerif');
+
+        $this->assertSame($writer, $result);
+        $config = $writer->getPdfConfig();
+        $this->assertEquals('DejaVuSerif', $config['default_font']);
+    }
+
+    public function test_set_pdf_font_size()
+    {
+        $writer = new PhpMarkdownWriter;
+        $result = $writer->setPdfFontSize(14);
+
+        $this->assertSame($writer, $result);
+        $config = $writer->getPdfConfig();
+        $this->assertEquals(14, $config['default_font_size']);
+    }
+
+    public function test_set_pdf_font_size_float()
+    {
+        $writer = new PhpMarkdownWriter;
+        $writer->setPdfFontSize(10.5);
+
+        $config = $writer->getPdfConfig();
+        $this->assertEquals(10.5, $config['default_font_size']);
+    }
+
+    public function test_save_as_pdf_with_custom_font()
+    {
+        $writer = new PhpMarkdownWriter;
+        $writer->setPdfFontFamily('DejaVuSerif');
+        $writer->setPdfFontSize(11);
+        $writer->h1('Custom Font Test');
+        $writer->paragraph('This uses a serif font.');
+
+        $filename = $this->tempDir.'/custom_font.pdf';
+        $writer->saveAsPdf($filename);
+
+        $this->assertFileExists($filename);
+        $content = file_get_contents($filename);
+        $this->assertStringStartsWith('%PDF', $content);
+    }
+
     public function test_add_pdf_header()
     {
         $writer = new PhpMarkdownWriter;
@@ -732,6 +777,64 @@ class PhpMarkdownWriterTest extends TestCase
         $content = file_get_contents($filename);
         $this->assertStringStartsWith('%PDF', $content);
         // PDF metadata is embedded in the file (may be hex-encoded)
+        $this->assertGreaterThan(1000, strlen($content));
+    }
+
+    public function test_add_pdf_subject()
+    {
+        $writer = new PhpMarkdownWriter;
+        $result = $writer->addPdfSubject('Monthly Sales Report');
+
+        $this->assertSame($writer, $result);
+    }
+
+    public function test_add_pdf_keywords()
+    {
+        $writer = new PhpMarkdownWriter;
+        $result = $writer->addPdfKeywords('sales, report, monthly, 2025');
+
+        $this->assertSame($writer, $result);
+    }
+
+    public function test_add_pdf_watermark()
+    {
+        $writer = new PhpMarkdownWriter;
+        $result = $writer->addPdfWatermark('DRAFT');
+
+        $this->assertSame($writer, $result);
+    }
+
+    public function test_save_as_pdf_with_watermark()
+    {
+        $writer = new PhpMarkdownWriter;
+        $writer->addPdfWatermark('CONFIDENTIAL');
+        $writer->h1('Secret Document');
+        $writer->paragraph('This is confidential content.');
+
+        $filename = $this->tempDir.'/watermarked.pdf';
+        $writer->saveAsPdf($filename);
+
+        $this->assertFileExists($filename);
+        $content = file_get_contents($filename);
+        $this->assertStringStartsWith('%PDF', $content);
+    }
+
+    public function test_save_as_pdf_with_full_metadata()
+    {
+        $writer = new PhpMarkdownWriter;
+        $writer->addPdfTitle('Annual Report');
+        $writer->addPdfAuthor('Finance Team');
+        $writer->addPdfSubject('Financial Overview 2025');
+        $writer->addPdfKeywords('finance, annual, report, 2025');
+        $writer->h1('Annual Report');
+        $writer->paragraph('Financial summary.');
+
+        $filename = $this->tempDir.'/full_metadata.pdf';
+        $writer->saveAsPdf($filename);
+
+        $this->assertFileExists($filename);
+        $content = file_get_contents($filename);
+        $this->assertStringStartsWith('%PDF', $content);
         $this->assertGreaterThan(1000, strlen($content));
     }
 

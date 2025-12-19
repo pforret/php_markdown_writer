@@ -4,7 +4,6 @@ Github:
 ![GitHub tag](https://img.shields.io/github/v/tag/pforret/php_markdown_writer)
 ![Tests](https://github.com/pforret/php_markdown_writer/workflows/Run%20Tests/badge.svg)
 ![Psalm](https://github.com/pforret/php_markdown_writer/workflows/Detect%20Psalm%20warnings/badge.svg)
-![Styling](https://github.com/pforret/php_markdown_writer/workflows/Check%20&%20fix%20styling/badge.svg)
 
 Packagist: 
 [![Packagist Version](https://img.shields.io/packagist/v/pforret/php_markdown_writer.svg?style=flat-square)](https://packagist.org/packages/pforret/php_markdown_writer)
@@ -141,6 +140,12 @@ The PDF output can be configured with these options:
 
 ```php
 $writer = new PhpMarkdownWriter();
+
+// Quick font settings
+$writer->setPdfFontFamily('DejaVuSerif');  // DejaVuSans, DejaVuSerif, FreeSans, etc.
+$writer->setPdfFontSize(11);
+
+// Or use full config
 $writer->setPdfConfig([
     'format' => 'Letter',          // 'A4', 'Letter', 'A5', etc.
     'default_font_size' => 11,
@@ -152,7 +157,7 @@ $writer->saveAsPdf('document.pdf');
 
 ### PDF Headers, Footers, and Metadata
 
-Add headers, footers, and metadata to PDF documents:
+Add headers, footers, metadata, and watermarks to PDF documents:
 
 ```php
 $writer = new PhpMarkdownWriter();
@@ -160,10 +165,15 @@ $writer = new PhpMarkdownWriter();
 // Set document metadata
 $writer->addPdfTitle('Annual Report 2025');
 $writer->addPdfAuthor('John Doe');
+$writer->addPdfSubject('Financial Overview');
+$writer->addPdfKeywords('finance, report, annual, 2025');
 
 // Set header and footer
 $writer->addPdfHeader('<div style="text-align: center;">My Document</div>');
 $writer->addPdfFooter('<div style="text-align: center;">Page {PAGENO} of {nbpg}</div>');
+
+// Add watermark (optional)
+$writer->addPdfWatermark('DRAFT');
 
 $writer->h1('Title')->paragraph('Content...');
 $writer->saveAsPdf('document.pdf');

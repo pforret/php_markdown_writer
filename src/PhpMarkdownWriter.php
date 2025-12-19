@@ -54,6 +54,12 @@ class PhpMarkdownWriter
 
     private string $pdfAuthor = '';
 
+    private string $pdfSubject = '';
+
+    private string $pdfKeywords = '';
+
+    private string $pdfWatermark = '';
+
     public function __construct(string $filename = '')
     {
         if ($filename) {
@@ -343,6 +349,27 @@ class PhpMarkdownWriter
     }
 
     /**
+     * Set PDF default font family.
+     * Common fonts: DejaVuSans, DejaVuSerif, FreeSans, FreeSerif, Arial, Times, Courier
+     */
+    public function setPdfFontFamily(string $font): static
+    {
+        $this->pdfConfig['default_font'] = $font;
+
+        return $this;
+    }
+
+    /**
+     * Set PDF default font size in points.
+     */
+    public function setPdfFontSize(int|float $size): static
+    {
+        $this->pdfConfig['default_font_size'] = $size;
+
+        return $this;
+    }
+
+    /**
      * Set PDF header HTML. Supports mPDF variables like {PAGENO}, {DATE}, {nbpg}.
      */
     public function addPdfHeader(string $html): static
@@ -383,6 +410,36 @@ class PhpMarkdownWriter
     }
 
     /**
+     * Set PDF document subject (metadata).
+     */
+    public function addPdfSubject(string $subject): static
+    {
+        $this->pdfSubject = $subject;
+
+        return $this;
+    }
+
+    /**
+     * Set PDF document keywords (metadata).
+     */
+    public function addPdfKeywords(string $keywords): static
+    {
+        $this->pdfKeywords = $keywords;
+
+        return $this;
+    }
+
+    /**
+     * Set PDF watermark text displayed on all pages.
+     */
+    public function addPdfWatermark(string $text): static
+    {
+        $this->pdfWatermark = $text;
+
+        return $this;
+    }
+
+    /**
      * @throws CommonMarkException
      */
     public function asHtml(): string
@@ -417,17 +474,32 @@ class PhpMarkdownWriter
     {
         $mpdf = new Mpdf($this->pdfConfig);
 
+        // Set metadata
         if ($this->pdfTitle !== '') {
             $mpdf->SetTitle($this->pdfTitle);
         }
         if ($this->pdfAuthor !== '') {
             $mpdf->SetAuthor($this->pdfAuthor);
         }
+        if ($this->pdfSubject !== '') {
+            $mpdf->SetSubject($this->pdfSubject);
+        }
+        if ($this->pdfKeywords !== '') {
+            $mpdf->SetKeywords($this->pdfKeywords);
+        }
+
+        // Set header and footer
         if ($this->pdfHeader !== '') {
             $mpdf->SetHTMLHeader($this->pdfHeader);
         }
         if ($this->pdfFooter !== '') {
             $mpdf->SetHTMLFooter($this->pdfFooter);
+        }
+
+        // Set watermark
+        if ($this->pdfWatermark !== '') {
+            $mpdf->SetWatermarkText($this->pdfWatermark);
+            $mpdf->showWatermarkText = true;
         }
 
         $mpdf->WriteHTML($this->asHtml());
