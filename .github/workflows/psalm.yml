@@ -1,33 +1,45 @@
-name: Detect Psalm warnings
+name: Psalm Static Analysis
 
 on:
-    push:
-        paths:
-            - '**.php'
-            - 'psalm.xml'
+  push:
+    branches: [master, main]
+    paths:
+      - '**.php'
+      - 'psalm.xml'
+      - 'psalm.xml.dist'
+  pull_request:
+    branches: [master, main]
+    paths:
+      - '**.php'
+      - 'psalm.xml'
+      - 'psalm.xml.dist'
 
 jobs:
-    psalm:
-        name: psalm
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
+  psalm:
+    name: Psalm
+    runs-on: ubuntu-latest
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '7.4'
-                  extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
-                  coverage: none
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Cache composer dependencies
-              uses: actions/cache@v1
-              with:
-                  path: vendor
-                  key: composer-${{ hashFiles('composer.lock') }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, bcmath, gd
+          coverage: none
 
-            - name: Run composer install
-              run: composer install -n --prefer-dist
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
-            - name: Run psalm
-              run: ./vendor/vimeo/psalm/psalm -c psalm.xml
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Run Psalm
+        run: vendor/bin/psalm --no-cache
