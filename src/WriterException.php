@@ -2,6 +2,4 @@
 
 namespace Pforret\PhpMarkdownWriter;
 
-class WriterException extends \Exception
-{
-}
+class WriterException extends \Exception {}

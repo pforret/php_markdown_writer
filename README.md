@@ -24,15 +24,152 @@ composer require pforret/php_markdown_writer
 
 ## Usage
 
-``` php
-$obj = new Pforret\PhpMarkdownWriter("output.md");
-echo $obj->h1('Output Report');
-echo $obj->h2('Input');
-echo $obj->paragraph('Lorem ipsum');
-echo $obj->h2('Output');
-echo $obj->bullet('point 1');
-echo $obj->bullet('point 2');
+### Basic Usage (in-memory)
+
+```php
+use Pforret\PhpMarkdownWriter\PhpMarkdownWriter;
+
+$writer = new PhpMarkdownWriter();
+$writer
+    ->h1('Document Title')
+    ->paragraph('Introduction text')
+    ->h2('Section 1')
+    ->bullet('Point 1')
+    ->bullet('Point 2', 1)  // indented
+    ->h2('Section 2')
+    ->code('echo "Hello";', 'php');
+
+echo $writer->asMarkdown();
 ```
+
+### Write directly to file
+
+```php
+$writer = new PhpMarkdownWriter('output.md');
+$writer->h1('Report')->paragraph('Content here.');
+// File is written automatically when $writer goes out of scope
+```
+
+### Export to different formats
+
+```php
+$writer = new PhpMarkdownWriter();
+$writer->h1('Title')->paragraph('Content');
+
+// Save as Markdown
+$writer->saveAsMarkdown('output.md');
+
+// Save as HTML
+$writer->saveAsHtml('output.html');
+
+// Save as PDF (requires mpdf/mpdf)
+$writer->saveAsPdf('output.pdf');
+
+// Get HTML string
+$html = $writer->asHtml();
+```
+
+## Available Methods
+
+### Headings & Structure
+- `h1($text)` - Level 1 heading
+- `h2($text)` - Level 2 heading
+- `h3($text)` - Level 3 heading
+- `h4($text)` - Level 4 heading
+- `h5($text)` - Level 5 heading
+- `h6($text)` - Level 6 heading
+- `hr()` - Horizontal rule/divider
+- `pagebreak()` - Page break for PDF output (adds `<pagebreak />`)
+
+### Text Formatting
+- `paragraph($text, $continued = false)` - Paragraph (use `$continued = true` for single line break)
+- `bold($text, $continued = false)` - Bold text
+- `italic($text, $continued = false)` - Italic text
+- `strikethrough($text, $continued = false)` - Strikethrough text (~~text~~)
+- `blockquote($text, $continued = false)` - Blockquote (> text)
+
+### Links & Images
+- `link($text, $url)` - Inline link [text](url)
+- `image($alt, $url, $title = '')` - Image ![alt](url "title")
+
+### Lists
+- `bullet($text, $indent = 0)` - Bullet point (use `$indent` for nested items)
+- `numbered($text, $number = 1, $indent = 0)` - Numbered list item
+- `check($text, $indent = 0, $done = false)` - Checkbox item
+
+### Code
+- `code($text, $language = '')` - Fenced code block with optional language
+- `fixed($text)` - Fixed-width/preformatted text (indented)
+- `inlineCode($text)` - Returns inline code string (\`text\`)
+
+### Tables
+- `table($array, $with_headers = true)` - Full table from array
+- `table_header($array)` - Table header row
+- `table_row($array)` - Table data row
+
+### Output
+- `asMarkdown()` - Get accumulated Markdown as string
+- `asHtml()` - Convert to HTML string
+- `saveAsMarkdown($filename)` - Save to Markdown file
+- `saveAsHtml($filename)` - Save to HTML file
+- `saveAsPdf($filename)` - Save to PDF file
+
+### Utility
+- `reset()` - Clear accumulated content
+- `setOutput($filename)` - Set file output after construction
+- `markup($text)` - Auto-convert URLs and emails to links
+- `getConverterConfig()` - Get current CommonMark converter config
+- `setConverterConfig($config)` - Modify CommonMark converter settings
+- `getPdfConfig()` - Get current mPDF config
+- `setPdfConfig($config)` - Modify mPDF settings
+
+### Converter Configuration
+
+The HTML converter can be configured with these options:
+
+```php
+$writer = new PhpMarkdownWriter();
+$writer->setConverterConfig([
+    'html_input' => 'escape',      // 'strip', 'allow', or 'escape'
+    'allow_unsafe_links' => false, // Block javascript:, vbscript:, etc.
+]);
+```
+
+### PDF Configuration
+
+The PDF output can be configured with these options:
+
+```php
+$writer = new PhpMarkdownWriter();
+$writer->setPdfConfig([
+    'format' => 'Letter',          // 'A4', 'Letter', 'A5', etc.
+    'default_font_size' => 11,
+    'margin_left' => 20,
+    'margin_right' => 20,
+]);
+$writer->saveAsPdf('document.pdf');
+```
+
+### PDF Headers, Footers, and Metadata
+
+Add headers, footers, and metadata to PDF documents:
+
+```php
+$writer = new PhpMarkdownWriter();
+
+// Set document metadata
+$writer->addPdfTitle('Annual Report 2025');
+$writer->addPdfAuthor('John Doe');
+
+// Set header and footer
+$writer->addPdfHeader('<div style="text-align: center;">My Document</div>');
+$writer->addPdfFooter('<div style="text-align: center;">Page {PAGENO} of {nbpg}</div>');
+
+$writer->h1('Title')->paragraph('Content...');
+$writer->saveAsPdf('document.pdf');
+```
+
+Available mPDF variables: `{PAGENO}`, `{nbpg}`, `{DATE j-m-Y}`, `{DOCNUM}`
 
 ## Testing
 
