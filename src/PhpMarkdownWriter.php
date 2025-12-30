@@ -246,7 +246,7 @@ class PhpMarkdownWriter
     {
         $line = '';
         foreach ($array as $cell) {
-            $line .= "| $cell ";
+            $line .= '|'.$this->formatTableCell($cell);
         }
         $line .= "|\n";
         $this->add($line);
@@ -267,12 +267,20 @@ class PhpMarkdownWriter
     {
         $line = '';
         foreach ($array as $cell) {
-            $line .= "| $cell ";
+            $line .= '|'.$this->formatTableCell($cell);
         }
         $line .= "|\n";
         $this->add($line);
 
         return $this;
+    }
+
+    private function formatTableCell(string $cell): string
+    {
+        $prefix = str_starts_with($cell, ':') ? '' : ' ';
+        $suffix = str_ends_with($cell, ':') ? '' : ' ';
+
+        return $prefix.$cell.$suffix;
     }
 
     public function table(array $table, bool $with_headers = true): static
