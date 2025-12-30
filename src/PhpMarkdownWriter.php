@@ -244,21 +244,33 @@ class PhpMarkdownWriter
 
     public function table_header(array $array): static
     {
-        $line = '';
-        foreach ($array as $cell) {
-            $line .= '|'.$this->formatTableCell($cell);
-        }
-        $line .= "|\n";
-        $this->add($line);
+        $headerLine = '';
+        $separatorLine = '';
 
-        $line = '';
-        // line underneath  |---|---|
         foreach ($array as $cell) {
-            $cell = str_repeat('-', strlen($cell) + 2);
-            $line .= "|$cell";
+            $leftColon = str_starts_with($cell, ':');
+            $rightColon = str_ends_with($cell, ':');
+
+            // Strip alignment markers from header text
+            $displayCell = $leftColon ? substr($cell, 1) : $cell;
+            $displayCell = $rightColon ? substr($displayCell, 0, -1) : $displayCell;
+
+            $headerLine .= '| '.$displayCell.' ';
+
+            // Build separator with alignment markers
+            $width = strlen($displayCell) + 2;
+            if ($leftColon && $rightColon) {
+                $separatorLine .= '|:'.str_repeat('-', $width - 2).':';
+            } elseif ($rightColon) {
+                $separatorLine .= '|'.str_repeat('-', $width - 1).':';
+            } elseif ($leftColon) {
+                $separatorLine .= '|:'.str_repeat('-', $width - 1);
+            } else {
+                $separatorLine .= '|'.str_repeat('-', $width);
+            }
         }
-        $line .= "|\n";
-        $this->add($line);
+
+        $this->add($headerLine."|\n".$separatorLine."|\n");
 
         return $this;
     }
@@ -277,10 +289,7 @@ class PhpMarkdownWriter
 
     private function formatTableCell(string $cell): string
     {
-        $prefix = str_starts_with($cell, ':') ? '' : ' ';
-        $suffix = str_ends_with($cell, ':') ? '' : ' ';
-
-        return $prefix.$cell.$suffix;
+        return ' '.$cell.' ';
     }
 
     public function table(array $table, bool $with_headers = true): static

@@ -432,33 +432,31 @@ class PhpMarkdownWriterTest extends TestCase
         $this->assertEquals("| value1 | value2 | value3 |\n", $writer->asMarkdown());
     }
 
-    public function test_table_row_with_left_alignment()
+    public function test_table_row_with_colons()
     {
+        // Colons in row data are just data, not alignment markers
         $writer = new PhpMarkdownWriter;
         $writer->table_row([':left', 'normal', 'other']);
-        $this->assertEquals("|:left | normal | other |\n", $writer->asMarkdown());
-    }
-
-    public function test_table_row_with_right_alignment()
-    {
-        $writer = new PhpMarkdownWriter;
-        $writer->table_row(['normal', 'right:', 'other']);
-        $this->assertEquals("| normal | right:| other |\n", $writer->asMarkdown());
-    }
-
-    public function test_table_row_with_center_alignment()
-    {
-        $writer = new PhpMarkdownWriter;
-        $writer->table_row(['normal', ':center:', 'other']);
-        $this->assertEquals("| normal |:center:| other |\n", $writer->asMarkdown());
+        $this->assertEquals("| :left | normal | other |\n", $writer->asMarkdown());
     }
 
     public function test_table_header_with_alignment()
     {
+        // Alignment markers (colons) are stripped from header and applied to separator
         $writer = new PhpMarkdownWriter;
         $writer->table_header([':Left', 'Normal', 'Right:']);
         $this->assertEquals(
-            "|:Left | Normal | Right:|\n|-------|--------|--------|\n",
+            "| Left | Normal | Right |\n|:-----|--------|------:|\n",
+            $writer->asMarkdown()
+        );
+    }
+
+    public function test_table_header_with_center_alignment()
+    {
+        $writer = new PhpMarkdownWriter;
+        $writer->table_header([':Center:', 'Normal']);
+        $this->assertEquals(
+            "| Center | Normal |\n|:------:|--------|\n",
             $writer->asMarkdown()
         );
     }
